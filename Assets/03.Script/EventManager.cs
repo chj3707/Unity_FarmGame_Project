@@ -26,6 +26,12 @@ public class EventManager : MonoBehaviour
         GameManager.GameState = GAMESTATE.PLOWING;
     }
 
+    // 씨앗심기 버튼 클릭
+    public void _On_PlantingBtnClick()
+    {
+        GameManager.GameState = GAMESTATE.PLANTING;
+    }
+
     // 작업중지 버튼 클릭
     public void _On_StopWorkBtnClick()
     {

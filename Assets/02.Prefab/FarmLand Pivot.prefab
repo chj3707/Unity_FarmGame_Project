@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2855022723973856273}
+  - component: {fileID: 18863972537229121}
   m_Layer: 0
   m_Name: FarmLand Pivot
   m_TagString: FarmLand
@@ -31,6 +32,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &18863972537229121
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7015243818445610681}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.8, z: 1}
+  m_Center: {x: 0, y: -0.1, z: 0}
 --- !u!1001 &4063413419541360825
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46,6 +60,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 287935674480320192, guid: 1b38b01a70bc5f444825b86cda7f86d3, type: 3}
+      propertyPath: m_Faces.Array.data[5].m_SubmeshIndex
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2102111485130882275, guid: 1b38b01a70bc5f444825b86cda7f86d3, type: 3}
       propertyPath: m_Name
       value: FarmLand
@@ -54,9 +72,17 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
+    - target: {fileID: 2986402066963017483, guid: 1b38b01a70bc5f444825b86cda7f86d3, type: 3}
+      propertyPath: m_SelectedEditorRenderState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5990407431378991487, guid: 1b38b01a70bc5f444825b86cda7f86d3, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5990407431378991487, guid: 1b38b01a70bc5f444825b86cda7f86d3, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 5990407431378991487, guid: 1b38b01a70bc5f444825b86cda7f86d3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -98,7 +124,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7145353553903098262, guid: 1b38b01a70bc5f444825b86cda7f86d3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1b38b01a70bc5f444825b86cda7f86d3, type: 3}
 --- !u!4 &7729891271403440582 stripped
 Transform:

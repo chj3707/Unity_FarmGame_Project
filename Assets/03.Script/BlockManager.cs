@@ -2,6 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class EXCLS
+{
+    public static int GetIgnoreLayerData(string p_layerstr)
+    {
+        // https://mentum.tistory.com/253 LayerMask
+        int layermask = 1 << LayerMask.NameToLayer(p_layerstr);
+        layermask = ~layermask; // "Select" 레이어만 제외
+
+        return layermask;
+    }
+}
+
 public class BlockManager : MonoBehaviour
 {
     public Transform FarmField = null;
@@ -47,9 +59,7 @@ public class BlockManager : MonoBehaviour
         // 메인카메라 에서 스크린 좌표의 마우스 위치로 레이 생성
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        // https://mentum.tistory.com/253 LayerMask
-        int layermask = 1 << LayerMask.NameToLayer("Select"); 
-        layermask = ~layermask; // "Select" 레이어만 제외
+        int layermask = EXCLS.GetIgnoreLayerData("Select");
 
         float maxdistance = Mathf.Abs(FarmField.position.magnitude - Camera.main.transform.position.magnitude);
 
@@ -61,6 +71,11 @@ public class BlockManager : MonoBehaviour
                 return;
             }
             if (GameManager.GameState == GAMESTATE.PLOWING && Hit_Info.transform.tag != "Dirt")
+            {
+                OffFocus();
+                return;
+            }
+            if (GameManager.GameState == GAMESTATE.PLANTING && Hit_Info.transform.tag != "FarmLand")
             {
                 OffFocus();
                 return;
