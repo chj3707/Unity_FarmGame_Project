@@ -8,7 +8,8 @@ public enum GAMESTATE
     STOP_WORK,
     WEEDING, // 풀 제거
     PLOWING, // 밭 갈기
-    PLANTING // 씨앗 심기
+    PLANTING, // 씨앗 심기
+    FARMING // 수확
 }
 
 public class GameManager : MonoBehaviour
@@ -38,6 +39,9 @@ public class GameManager : MonoBehaviour
                 break;
             case GAMESTATE.PLANTING:
                 PlantingProcess();
+                break;
+            case GAMESTATE.FARMING:
+                FarmingProcess();
                 break;
         }
     }
@@ -148,5 +152,32 @@ public class GameManager : MonoBehaviour
         copyobj.transform.position = m_BlockManager.Hit_Info.transform.position;
 
         GameObject.Destroy(m_BlockManager.Hit_Info.transform.gameObject);
+    }
+
+    /* 작물 수확 */
+    void FarmingProcess()
+    {
+        if (!m_BlockManager.IS_Focus)
+        {
+            return;
+        }
+
+        // 블록 포커스 상태에서 마우스 클릭
+        else
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (m_BlockManager.Hit_Info.transform.tag != "Crops")
+                {
+                    return;
+                }
+
+                // 작물의 부모오브젝트(FarmLand Pivot)에 접근해서 심겨져 있지 않은 상태(NONE)로 변경
+                m_FarmLand = m_BlockManager.Hit_Info.transform.GetComponentInParent<FarmLand>();
+                m_FarmLand.IS_Plant = false;
+
+                GameObject.Destroy(m_BlockManager.Hit_Info.transform.gameObject);
+            }
+        }
     }
 }

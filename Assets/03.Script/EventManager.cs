@@ -7,6 +7,7 @@ public class EventManager : MonoBehaviour
 
     void Start()
     {
+
     }
 
     void Update()
@@ -30,6 +31,12 @@ public class EventManager : MonoBehaviour
     public void _On_PlantingBtnClick()
     {
         GameManager.GameState = GAMESTATE.PLANTING;
+    }
+
+    // 작물수확 버튼 클릭
+    public void _On_FarmingBtnClick()
+    {
+        GameManager.GameState = GAMESTATE.FARMING;
     }
 
     // 작업중지 버튼 클릭
