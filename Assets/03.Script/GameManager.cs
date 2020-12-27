@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum GAMESTATE
 {
@@ -96,6 +97,7 @@ public class GameManager : MonoBehaviour
     }
 
     public GameObject Seed = null;
+    public EventManager EventMgr = null;
 
     /* 씨앗 심기 */
     void PlantingProcess()
@@ -114,10 +116,42 @@ public class GameManager : MonoBehaviour
                 {
                     return;
                 }
+                // 씨앗 개수 부족
+                if (Inven.MySeedCount <= 0)
+                {
+                    Text temptext = GameObject.Instantiate(EventMgr.ErrorMsg);
+                    temptext.transform.SetParent(EventMgr.transform);
+                    temptext.transform.localPosition = Vector3.zero;
+                    temptext.transform.localScale = Vector3.one;
+                    StartCoroutine(ErrorMsgCoroutine(temptext, EventMgr.SeedErrorMsg));
+                    return;
+                }
 
                 ObjectManagement(Seed);
+                --Inven.MySeedCount;
+                Inven.Seed.text = string.Format(": {0}", Inven.MySeedCount);
             }
         }
+    }
+    
+    // 메시지 색 변경하면서 투명해지면 오브젝트 삭제
+    IEnumerator ErrorMsgCoroutine(Text p_text, string p_str)
+    {
+        Color tempcolor = p_text.color;
+        while(true)
+        {
+            tempcolor = Color.Lerp(tempcolor, Color.clear, 0.2f);
+            p_text.text = string.Format(p_str);
+
+            yield return new WaitForSeconds(0.1f);
+
+            p_text.color = tempcolor;
+            if (p_text.color == Color.clear)
+            {
+                break;
+            }
+        }
+        GameObject.Destroy(p_text.gameObject);
     }
 
     public float SeedYpos = 0.3f;
@@ -136,6 +170,9 @@ public class GameManager : MonoBehaviour
 
             m_FarmLand.IS_Plant = true;
 
+            GrowCrops seedinfo = p_obj.GetComponent<GrowCrops>();
+            seedinfo.PlantState = E_PLANTSTATE.PLANT;
+
             Vector3 seedpos = Vector3.up * SeedYpos;
             GameObject copyseed = GameObject.Instantiate(p_obj);
             copyseed.SetActive(true);
@@ -153,6 +190,8 @@ public class GameManager : MonoBehaviour
 
         GameObject.Destroy(m_BlockManager.Hit_Info.transform.gameObject);
     }
+
+    public Inventroy Inven = null;
 
     /* 작물 수확 */
     void FarmingProcess()
@@ -176,7 +215,43 @@ public class GameManager : MonoBehaviour
                 m_FarmLand = m_BlockManager.Hit_Info.transform.GetComponentInParent<FarmLand>();
                 m_FarmLand.IS_Plant = false;
 
-                GameObject.Destroy(m_BlockManager.Hit_Info.transform.gameObject);
+                SetSlotInfomation(Inven.SlotList);
+
+                GameObject.Destroy(m_BlockManager.Hit_Info.transform.parent.gameObject);
+            }
+        }
+    }
+
+    // 슬롯 정보 설정
+    void SetSlotInfomation(List<Slot> p_list)
+    {
+        // 수확한 작물 아이템 정보
+        ItemInfo info = m_BlockManager.Hit_Info.transform.GetComponentInParent<ItemInfo>();
+
+        // 인벤토리 슬롯 아이템 정보 설정, 이미지 변경
+        foreach (var item in p_list)
+        {
+            if (item.SlotState == E_SLOTSTATE.EMPTY)
+            {
+                item.ItemInfo = info.CropsInfo; // 작물 정보
+                item.SlotImage.sprite = info.CropsInfo.ItemSprite; // 이미지
+                ++item.CropsCount; // 작물 개수
+                item.SlotState = E_SLOTSTATE.FULL;
+                break;
+            }
+
+            // 슬롯에 아이템이 이미 있는 경우
+            else
+            {
+                // 수확한 작물과 슬롯의 아이템 정보가 일치하면 아이템 개수 증가시키고 반복문 종료
+                if (item.ItemInfo == info.CropsInfo)
+                {
+                    ++item.CropsCount;
+                    break;
+                }
+
+                else
+                    continue;
             }
         }
     }
