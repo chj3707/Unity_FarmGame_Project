@@ -84,9 +84,9 @@ public class GrowCrops : MonoBehaviour
 
         for (int i = 0; i < CropsArr.Length; i++)
         {
-            for (int j = 0; j < ItemManager.DataBase.ItemListData.Count; j++)
+            for (int j = 0; j < ItemManager.CropsItemDataBase.ItemListData.Count; j++)
             {
-                if (CropsArr[i].name == ItemManager.DataBase.ItemListData[j].ItemName)
+                if (CropsArr[i].name == ItemManager.CropsItemDataBase.ItemListData[j].ItemName)
                 {
                     tempobj = CropsArr[i];
                     CropsArr[i] = CropsArr[j];
@@ -95,13 +95,12 @@ public class GrowCrops : MonoBehaviour
                 }
             }
         }
-
     }
 
     // 프로토타입 설정
     void SetProtoType(GameObject p_prototype)
     {
-        int randindex = Random.Range(0, ItemManager.DataBase.ItemListData.Count);
+        int randindex = Random.Range(0, ItemManager.CropsItemDataBase.ItemListData.Count);
 
         GameObject copyobj = GameObject.Instantiate(CropsArr[randindex]);
         copyobj.transform.SetParent(p_prototype.transform);
@@ -109,7 +108,7 @@ public class GrowCrops : MonoBehaviour
 
         // 작물 정보 설정
         ItemInfo info = copyobj.GetComponentInParent<ItemInfo>();
-        info.CropsInfo = ItemManager.DataBase.ItemListData[randindex];
+        info.CropsInfo = ItemManager.CropsItemDataBase.ItemListData[randindex];
         //Debug.Log(ItemManager.DataBase.ItemListData[randindex].ItemName);
     }
 }

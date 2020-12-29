@@ -29,20 +29,19 @@ public class Item
     public Item() { }
 }
 
+[System.Serializable]
 public class ItemList
 {
-    public List<Item> ItemListData;
+    public List<Item> ItemListData = new List<Item>();
 }
 
 
 public class ItemManager : MonoBehaviour
 {
-    private List<Item> ItemSaveData = new List<Item>();
-
-    public static ItemList DataBase = new ItemList();
-
+    public static ItemList CropsItemDataBase = new ItemList();
+    public static ItemList StoreItemDataBase = new ItemList();
     void Awake()
-    { 
+    {
         SaveData();
         LoadData();
     }
@@ -59,20 +58,28 @@ public class ItemManager : MonoBehaviour
 
     void SaveData()
     {
-        ItemSaveData.Add(new Item(0, "Carrot", 5, E_ITEMTYPE.CROPS, Resources.Load<Sprite>("UI Texture/Carrot")));
-        ItemSaveData.Add(new Item(1, "Pumpkin", 7, E_ITEMTYPE.CROPS, Resources.Load<Sprite>("UI Texture/Pumpkin")));
-        ItemSaveData.Add(new Item(2, "Watermelon", 10, E_ITEMTYPE.CROPS, Resources.Load<Sprite>("UI Texture/Watermelon")));
+        CropsItemDataBase.ItemListData.Clear();
+        CropsItemDataBase.ItemListData.Add(new Item(0, "Carrot", 5, E_ITEMTYPE.CROPS, Resources.Load<Sprite>("UI Texture/Carrot")));
+        CropsItemDataBase.ItemListData.Add(new Item(1, "Pumpkin", 7, E_ITEMTYPE.CROPS, Resources.Load<Sprite>("UI Texture/Pumpkin")));
+        CropsItemDataBase.ItemListData.Add(new Item(2, "Watermelon", 10, E_ITEMTYPE.CROPS, Resources.Load<Sprite>("UI Texture/Watermelon")));
+        CropsItemDataBase.ItemListData.Add(new Item(3, "Tomato", 3, E_ITEMTYPE.CROPS, Resources.Load<Sprite>("UI Texture/Tomato")));
+        CropsItemDataBase.ItemListData.Add(new Item(4, "Onion", 3, E_ITEMTYPE.CROPS, Resources.Load<Sprite>("UI Texture/Onion")));
 
-        DataBase.ItemListData = ItemSaveData;
+        File.WriteAllText(Application.dataPath + "/Resources/ItemData.json", JsonUtility.ToJson(CropsItemDataBase));
 
-        File.WriteAllText(Application.dataPath + "/Resources/ItemData.json", JsonUtility.ToJson(DataBase));
+        StoreItemDataBase.ItemListData.Clear();
+        StoreItemDataBase.ItemListData.Add(new Item(0, "Seed", 5, E_ITEMTYPE.SEED, Resources.Load<Sprite>("UI Texture/Seed")));
+
+        File.WriteAllText(Application.dataPath + "/Resources/StoreItemData.json", JsonUtility.ToJson(StoreItemDataBase));
     }
 
     void LoadData()
     {
-        string str = File.ReadAllText(Application.dataPath + "/Resources/ItemData.json");
-        DataBase = JsonUtility.FromJson<ItemList>(str);
+        string str1 = File.ReadAllText(Application.dataPath + "/Resources/ItemData.json");
+        CropsItemDataBase = JsonUtility.FromJson<ItemList>(str1);
 
+        string str2 = File.ReadAllText(Application.dataPath + "/Resources/StoreItemData.json");
+        StoreItemDataBase = JsonUtility.FromJson<ItemList>(str2);
     }
 }
 

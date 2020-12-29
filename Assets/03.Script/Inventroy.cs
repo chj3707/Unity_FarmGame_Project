@@ -11,14 +11,18 @@ public class Inventroy : MonoBehaviour
     public List<Slot> SlotList = new List<Slot>();
     public int SlotCount = 10;
 
+    public BlockManager BlockManager = null;
+
     public Text Gold = null;
     public int MyGold = 50;
 
     public Text Seed = null;
     public int MySeedCount = 5;
 
-    void Start()
+    IEnumerator Start()
     {
+        yield return null;
+
         this.gameObject.SetActive(false);
         Slot.gameObject.SetActive(false);
 
@@ -38,12 +42,16 @@ public class Inventroy : MonoBehaviour
             item.gameObject.SetActive(true);
         }
 
+        UpdateInvenUI();
+    }
+
+    public void UpdateInvenUI()
+    {
         Gold.text = string.Format("Gold : {0}", MyGold);
         Seed.text = string.Format(": {0}", MySeedCount);
     }
 
     void Update()
     {
-        
     }
 }

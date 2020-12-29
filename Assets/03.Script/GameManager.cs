@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
                 {
                     Text temptext = GameObject.Instantiate(EventMgr.ErrorMsg);
                     temptext.transform.SetParent(EventMgr.transform);
-                    temptext.transform.localPosition = Vector3.zero;
+                    temptext.transform.localPosition = Vector3.up * 300f;
                     temptext.transform.localScale = Vector3.one;
                     StartCoroutine(ErrorMsgCoroutine(temptext, EventMgr.SeedErrorMsg));
                     return;
@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
 
                 ObjectManagement(Seed);
                 --Inven.MySeedCount;
-                Inven.Seed.text = string.Format(": {0}", Inven.MySeedCount);
+                Inven.UpdateInvenUI();
             }
         }
     }
@@ -138,10 +138,11 @@ public class GameManager : MonoBehaviour
     IEnumerator ErrorMsgCoroutine(Text p_text, string p_str)
     {
         Color tempcolor = p_text.color;
-        while(true)
+        p_text.text = string.Format(p_str);
+
+        while (true)
         {
             tempcolor = Color.Lerp(tempcolor, Color.clear, 0.2f);
-            p_text.text = string.Format(p_str);
 
             yield return new WaitForSeconds(0.1f);
 
@@ -237,16 +238,17 @@ public class GameManager : MonoBehaviour
                 item.SlotImage.sprite = info.CropsInfo.ItemSprite; // 이미지
                 ++item.CropsCount; // 작물 개수
                 item.SlotState = E_SLOTSTATE.FULL;
+                item.UpdateSlotUI();
                 break;
             }
 
-            // 슬롯에 아이템이 이미 있는 경우
             else
             {
                 // 수확한 작물과 슬롯의 아이템 정보가 일치하면 아이템 개수 증가시키고 반복문 종료
                 if (item.ItemInfo == info.CropsInfo)
                 {
                     ++item.CropsCount;
+                    item.UpdateSlotUI();
                     break;
                 }
 
@@ -254,5 +256,6 @@ public class GameManager : MonoBehaviour
                     continue;
             }
         }
+        
     }
 }
