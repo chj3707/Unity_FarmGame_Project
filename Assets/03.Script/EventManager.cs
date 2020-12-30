@@ -10,6 +10,7 @@ public class EventManager : MonoBehaviour
 
     public Text ErrorMsg = null;
     public string SeedErrorMsg = "씨앗이 부족합니다.";
+    public string GoldErrorMsg = "돈이 부족합니다.";
 
     public Image BgroundImage = null;
 

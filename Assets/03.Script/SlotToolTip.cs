@@ -9,7 +9,7 @@ public class SlotToolTip : MonoBehaviour
 
     public Text ItemsName = null;
     public Text ItemsInfo = null;
-    public Text ItemsPrice = null;
+    public Text ItemsTip = null;
 
     void Start()
     {

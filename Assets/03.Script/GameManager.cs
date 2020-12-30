@@ -13,6 +13,29 @@ public enum GAMESTATE
     FARMING // 수확
 }
 
+public static class ErrorMsg
+{
+    // 메시지 색 변경하면서 투명해지면 오브젝트 삭제
+    public static IEnumerator ErrorMsgCoroutine(Text p_text, string p_str)
+    {
+        Color tempcolor = p_text.color;
+        p_text.text = string.Format(p_str);
+
+        while (true)
+        {
+            tempcolor = Color.Lerp(tempcolor, Color.clear, 0.2f);
+            yield return new WaitForSeconds(0.1f);
+
+            p_text.color = tempcolor;
+            if (p_text.color == Color.clear)
+            {
+                break;
+            }
+        }
+        GameObject.Destroy(p_text.gameObject);
+    }
+}
+
 public class GameManager : MonoBehaviour
 {
     public static GAMESTATE GameState;
@@ -123,7 +146,7 @@ public class GameManager : MonoBehaviour
                     temptext.transform.SetParent(EventMgr.transform);
                     temptext.transform.localPosition = Vector3.up * 300f;
                     temptext.transform.localScale = Vector3.one;
-                    StartCoroutine(ErrorMsgCoroutine(temptext, EventMgr.SeedErrorMsg));
+                    StartCoroutine(ErrorMsg.ErrorMsgCoroutine(temptext, EventMgr.SeedErrorMsg));
                     return;
                 }
 
@@ -133,27 +156,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    
-    // 메시지 색 변경하면서 투명해지면 오브젝트 삭제
-    IEnumerator ErrorMsgCoroutine(Text p_text, string p_str)
-    {
-        Color tempcolor = p_text.color;
-        p_text.text = string.Format(p_str);
-
-        while (true)
-        {
-            tempcolor = Color.Lerp(tempcolor, Color.clear, 0.2f);
-
-            yield return new WaitForSeconds(0.1f);
-
-            p_text.color = tempcolor;
-            if (p_text.color == Color.clear)
-            {
-                break;
-            }
-        }
-        GameObject.Destroy(p_text.gameObject);
-    }
+   
 
     public float SeedYpos = 0.3f;
     FarmLand m_FarmLand = null;
@@ -236,7 +239,7 @@ public class GameManager : MonoBehaviour
             {
                 item.ItemInfo = info.CropsInfo; // 작물 정보
                 item.SlotImage.sprite = info.CropsInfo.ItemSprite; // 이미지
-                ++item.CropsCount; // 작물 개수
+                ++item.Count; // 작물 개수
                 item.SlotState = E_SLOTSTATE.FULL;
                 item.UpdateSlotUI();
                 break;
@@ -247,7 +250,7 @@ public class GameManager : MonoBehaviour
                 // 수확한 작물과 슬롯의 아이템 정보가 일치하면 아이템 개수 증가시키고 반복문 종료
                 if (item.ItemInfo == info.CropsInfo)
                 {
-                    ++item.CropsCount;
+                    ++item.Count;
                     item.UpdateSlotUI();
                     break;
                 }

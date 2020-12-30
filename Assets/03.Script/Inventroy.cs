@@ -31,6 +31,7 @@ public class Inventroy : MonoBehaviour
         {
             Slot copyobj = GameObject.Instantiate(Slot);
             copyobj.name = string.Format("SLOT {0}", i + 1);
+            copyobj.SlotType = E_SLOTTYPE.INVENTORY;
             copyobj.transform.SetParent(SlotPivot);
             copyobj.transform.localScale = Vector3.one;
 
